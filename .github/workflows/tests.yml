@@ -98,7 +98,7 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
         python: ["3.10", "3.12", "3.14"]
-        node: [18.x, 20.x, 22.x]
+        node: [20.x, 22.x, 24.x, 26.x]
         include:  # `npm test` runs Windows find-visualstudio tests on an Intel Mac!!!
           - os: macos-15-intel  # macOS on Intel
             python: "3.14"
