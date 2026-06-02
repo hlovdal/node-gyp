@@ -4,7 +4,7 @@
 name: Tests
 on:
   push:
-    branches: [ main ]
+    branches: [ main, actiontest-v10 ]
   pull_request:
     branches: [ main ]
   workflow_call:
