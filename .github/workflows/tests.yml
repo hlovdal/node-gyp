@@ -4,11 +4,10 @@
 name: Tests
 on:
   push:
-    branches: [ main, actiontest-v12 ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_call:
-  workflow_dispatch:
 
 permissions:
   contents: read # to fetch code (actions/checkout)
@@ -18,8 +17,8 @@ jobs:
     name: Lint Python
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v7
-    - uses: astral-sh/ruff-action@v4.1.0
+    - uses: actions/checkout@v6
+    - uses: astral-sh/ruff-action@v3
       with:
         args: "check --select=E,F,PLC,PLE,UP,W,YTT --ignore=E721,PLC0206,PLC0415,PLC1901,S101,UP031 --target-version=py39"
     - run: ruff format --check --diff
@@ -29,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v7
+      uses: actions/checkout@v6
     - name: Use Node.js 22.x
       uses: actions/setup-node@v6
       with:
@@ -44,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v7
+      uses: actions/checkout@v6
     - name: Use Node.js 22.x
       uses: actions/setup-node@v6
       with:
@@ -62,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v7
+      uses: actions/checkout@v6
     - name: Use Node.js 22.x
       uses: actions/setup-node@v6
       with:
@@ -98,17 +97,17 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
         python: ["3.10", "3.12", "3.14"]
-        node: [22.x, 24.x, 26.x]
+        node: [20.x, 22.x, 24.x]
         include:
           - os: macos-15-intel  # macOS on Intel
             python: "3.14"
-            node: 26.x
+            node: 24.x
           - os: ubuntu-24.04-arm  # Ubuntu on ARM
             python: "3.14"
-            node: 26.x
+            node: 24.x
           - os: windows-11-arm  # Windows on ARM
             python: "3.14"
-            node: 26.x
+            node: 24.x
     name: ${{ matrix.os }} - ${{ matrix.python }} - ${{ matrix.node }}
     runs-on: ${{ matrix.os }}
     env:
@@ -117,13 +116,13 @@ jobs:
       WASI_SDK_PATH: 'wasi-sdk-25.0'
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
       - name: Use Python ${{ matrix.python }}
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
           allow-prereleases: true
@@ -171,10 +170,10 @@ jobs:
         shell: bash
         run: npm test --python="${pythonLocation}/python"
         env:
-          FULL_TEST: ${{ (matrix.node == '26.x' && matrix.python == '3.14') && '1' || '0' }}
+          FULL_TEST: ${{ (matrix.node == '24.x' && matrix.python == '3.14') && '1' || '0' }}
       - name: Run Tests (Windows)
         if: runner.os == 'Windows'
         shell: bash # Building wasm on Windows requires using make generator, it only works in bash
         run: npm run test --python="${pythonLocation}\\python.exe"
         env:
-          FULL_TEST: ${{ (matrix.node == '26.x' && matrix.python == '3.14') && '1' || '0' }}
+          FULL_TEST: ${{ (matrix.node == '24.x' && matrix.python == '3.14') && '1' || '0' }}
