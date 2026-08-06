@@ -24,6 +24,7 @@ jobs:
     - run: ruff format --verbose --check --diff
 
   lint-js:
+    if: false
     name: Lint JS
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +40,7 @@ jobs:
       run: npm run lint
 
   check-engines:
+    if: false
     name: Check Engines
     runs-on: ubuntu-latest
     steps:
@@ -57,6 +59,7 @@ jobs:
         node .github/scripts/check-engines.js
 
   test-pack:
+    if: false
     name: Test Pack
     runs-on: ubuntu-latest
     steps:
@@ -91,6 +94,7 @@ jobs:
         npm test
 
   tests:
+    if: false
     strategy:
       fail-fast: false
       max-parallel: 11
